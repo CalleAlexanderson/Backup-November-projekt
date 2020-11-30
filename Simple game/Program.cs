@@ -9,16 +9,20 @@ namespace Simple_game
         static void Main(string[] args)
         {
             Rectangle player = new Rectangle(400, 300, 20, 20);
+            Rectangle borderNorth = new Rectangle(0, 0, 800, 1);
+            Rectangle borderWest = new Rectangle(0, 0, 1, 600);
+            Rectangle borderSouth = new Rectangle(0, 599, 800, 1);
+            Rectangle borderEast = new Rectangle(799, 0, 1, 600);
             int reload = 1;
             string direction = "up";
+            Rectangle shot = new Rectangle(1000, 1000, 10, 10);
+            float shotX = 0;
+            float shotY = 0;
+            int shotCount = 0;
 
             Raylib.InitWindow(800, 600, "buck");
             while (!Raylib.WindowShouldClose())
             {
-                Rectangle shotUp = new Rectangle(player.x + 5, player.y - 10, 10, 10);
-                Rectangle shotLeft = new Rectangle(player.x - 10, player.y + 5, 10, 10);
-                Rectangle shotDown = new Rectangle(player.x + 5, player.y + 20, 10, 10);
-                Rectangle shotRight = new Rectangle(player.x + 20, player.y + 5, 10, 10);
 
                 if (Raylib.IsKeyDown(KeyboardKey.KEY_W))
                 {
@@ -45,29 +49,57 @@ namespace Simple_game
                 }
 
                 reload--;
+                shot.x += shotX;
+                shot.y += shotY;
 
                 Raylib.BeginDrawing();
                 Raylib.ClearBackground(Color.WHITE);
                 Raylib.DrawRectangleRec(player, Color.RED);
-                if (Raylib.IsKeyDown(KeyboardKey.KEY_SPACE) && reload < 0 && direction == "up")
+
+                if (!Raylib.CheckCollisionRecs(shot, borderNorth) && !Raylib.CheckCollisionRecs(shot, borderWest) && !Raylib.CheckCollisionRecs(shot, borderSouth) && !Raylib.CheckCollisionRecs(shot, borderEast))
                 {
-                    Raylib.DrawRectangleRec(shotUp, Color.GREEN);
-                    reload = 1;
+                    Raylib.DrawRectangleRec(shot, Color.GREEN);
                 }
-                else if (Raylib.IsKeyDown(KeyboardKey.KEY_SPACE) && reload < 0 && direction == "left")
+
+                if (Raylib.CheckCollisionRecs(shot, borderNorth) || Raylib.CheckCollisionRecs(shot, borderWest) || Raylib.CheckCollisionRecs(shot, borderSouth) || Raylib.CheckCollisionRecs(shot, borderEast))
                 {
-                    Raylib.DrawRectangleRec(shotLeft, Color.GREEN);
-                    reload = 1;
+                    shotCount = 0;
                 }
-                else if (Raylib.IsKeyDown(KeyboardKey.KEY_SPACE) && reload < 0 && direction == "down")
+                if (Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE) && shotCount == 0 && reload < 0 && direction == "up")
                 {
-                    Raylib.DrawRectangleRec(shotDown, Color.GREEN);
+                    shot.x = player.x + 5;
+                    shot.y = player.y - 10;
+                    shotX = 0;
+                    shotY = -0.15f;
                     reload = 1;
+                    shotCount = 1;
                 }
-                else if (Raylib.IsKeyDown(KeyboardKey.KEY_SPACE) && reload < 0 && direction == "right")
+                else if (Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE) && shotCount == 0 && reload < 0 && direction == "left")
                 {
-                    Raylib.DrawRectangleRec(shotRight, Color.GREEN);
+                    shot.x = player.x - 10;
+                    shot.y = player.y + 5;
+                    shotX = -0.15f;
+                    shotY = 0;
                     reload = 1;
+                    shotCount = 1;
+                }
+                else if (Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE) && shotCount == 0 && reload < 0 && direction == "down")
+                {
+                    shot.x = player.x + 5;
+                    shot.y = player.y + 20;
+                    shotX = 0;
+                    shotY = 0.15f;
+                    reload = 1;
+                    shotCount = 1;
+                }
+                else if (Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE) && shotCount == 0 && reload < 0 && direction == "right")
+                {
+                    shot.x = player.x + 20;
+                    shot.y = player.y + 5;
+                    shotX = 0.15f;
+                    shotY = 0;
+                    reload = 1;
+                    shotCount = 1;
                 }
                 Raylib.EndDrawing();
 
