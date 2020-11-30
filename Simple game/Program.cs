@@ -13,12 +13,15 @@ namespace Simple_game
             Rectangle borderWest = new Rectangle(0, 0, 1, 600);
             Rectangle borderSouth = new Rectangle(0, 599, 800, 1);
             Rectangle borderEast = new Rectangle(799, 0, 1, 600);
-            int reload = 1;
-            string direction = "up";
             Rectangle shot = new Rectangle(1000, 1000, 10, 10);
+            Rectangle enemy = new Rectangle(0, 0, 20, 20);
+            string direction = "up";
             float shotX = 0;
             float shotY = 0;
             int shotCount = 0;
+            int reload = 1;
+            bool enemyAlive = true;
+
 
             Raylib.InitWindow(800, 600, "buck");
             while (!Raylib.WindowShouldClose())
@@ -48,6 +51,17 @@ namespace Simple_game
                     direction = "right";
                 }
 
+
+                if (enemy.x < player.x)
+                {
+                    enemy.x += enemy.x + 0.1f;
+                }
+
+                if (enemy.x > player.x)
+                {
+                    enemy.x -= enemy.x - 0.1f;
+                }
+
                 reload--;
                 shot.x += shotX;
                 shot.y += shotY;
@@ -55,6 +69,11 @@ namespace Simple_game
                 Raylib.BeginDrawing();
                 Raylib.ClearBackground(Color.WHITE);
                 Raylib.DrawRectangleRec(player, Color.RED);
+
+                if (enemyAlive == true)
+                {
+                    Raylib.DrawRectangleRec(enemy, Color.BLUE);
+                }
 
                 if (!Raylib.CheckCollisionRecs(shot, borderNorth) && !Raylib.CheckCollisionRecs(shot, borderWest) && !Raylib.CheckCollisionRecs(shot, borderSouth) && !Raylib.CheckCollisionRecs(shot, borderEast))
                 {
