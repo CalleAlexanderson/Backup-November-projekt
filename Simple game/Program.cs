@@ -8,33 +8,45 @@ namespace Simple_game
     {
         static void Main(string[] args)
         {
+            string direction = "up";
+            string screen = "intro";
+            float shotX = 0;
+            float shotY = 0;
+            int shotCount = 0;
+            int reload = 1;
+            int wave = 0;
+            int shotSizeY = 10;
+            int shotSizeX = 10;
+            bool enemyAlive = true;
+            bool shotAlive = false;
+            bool powerUpAlive = true;
+            int[] enemies = new int[9];
             Rectangle player = new Rectangle(400, 300, 20, 20);
             Rectangle borderNorth = new Rectangle(0, 0, 800, 1);
             Rectangle borderWest = new Rectangle(0, 0, 1, 600);
             Rectangle borderSouth = new Rectangle(0, 599, 800, 1);
             Rectangle borderEast = new Rectangle(799, 0, 1, 600);
-            Rectangle shot = new Rectangle(1000, 1000, 10, 10);
+            Rectangle shot = new Rectangle(1000, 1000, shotSizeX, shotSizeY);
             Rectangle enemy = new Rectangle(0, 0, 20, 20);
-            string direction = "up";
-            string screen = "game";
-            float shotX = 0;
-            float shotY = 0;
-            int shotCount = 0;
-            int reload = 1;
-            bool enemyAlive = true;
-            bool shotAlive = false;
+            Rectangle powerUp = new Rectangle(140, 450, 15, 15);
 
 
-            Raylib.InitWindow(800, 600, "buck");
+            Raylib.InitWindow(800, 600, "Game");
             Raylib.SetTargetFPS(60);
             while (!Raylib.WindowShouldClose())
             {
                 Raylib.BeginDrawing();
-                // if (screen == "intro")
-                // {
-                //     Raylib.ClearBackground(Color.GRAY);
-                //     Raylib.DrawText("")
-                // }
+                if (screen == "intro")
+                {
+                    Raylib.ClearBackground(Color.GRAY);
+                    Raylib.DrawText("Press enter to start", 165, 200, 40, Color.WHITE);
+
+                    if (Raylib.IsKeyPressed(KeyboardKey.KEY_ENTER))
+                    {
+                        screen = "game";
+                        wave = 1;
+                    }
+                }
 
                 if (screen == "game")
                 {
@@ -152,6 +164,12 @@ namespace Simple_game
                         shotCount = 1;
                         shotAlive = true;
                     }
+
+                    if (wave > 1 && powerUpAlive == true)
+                    {
+                        Raylib.DrawRectangleRec(powerUp, Color.BLUE);
+                    }
+
                 }
                 Raylib.EndDrawing();
 
