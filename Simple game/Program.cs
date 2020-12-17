@@ -18,6 +18,8 @@ namespace Simple_game
             int shotSizeY = 10;
             int shotSizeX = 10;
             int enemyBossHp = 5;
+            int powerTime = 5;
+            int shotValue = 1;
             bool enemy1Alive = true;
             bool enemy2Alive = true;
             bool enemy3Alive = true;
@@ -35,6 +37,7 @@ namespace Simple_game
             bool toggle3 = true;
             bool toggle4 = true;
             bool toggle5 = true;
+            bool poweredUp = false;
             Rectangle player = new Rectangle(400, 300, 20, 20);
             Rectangle borderNorth = new Rectangle(0, 0, 800, 1);
             Rectangle borderWest = new Rectangle(0, 0, 1, 600);
@@ -169,8 +172,8 @@ namespace Simple_game
                     }
 
                     reload--;
-                    shot.x += shotX;
-                    shot.y += shotY;
+                    shot.x += shotX * shotValue;
+                    shot.y += shotY * shotValue;
 
                     Raylib.ClearBackground(Color.WHITE);
                     Raylib.DrawRectangleRec(player, Color.RED);
@@ -494,12 +497,17 @@ namespace Simple_game
                         toggle5 = false;
                     }
 
+                    if (shotAlive == false)
+                    {
+                        shot.x = -1000;
+                        shot.y = -1000;
+                    }
                     if (shotAlive == true)
                     {
                         Raylib.DrawRectangleRec(shot, Color.GREEN);
                     }
 
-                    if (Raylib.CheckCollisionRecs(shot, borderNorth) || Raylib.CheckCollisionRecs(shot, borderWest) || Raylib.CheckCollisionRecs(shot, borderSouth) || Raylib.CheckCollisionRecs(shot, borderEast) || Raylib.CheckCollisionRecs(shot, enemy1))
+                    if (Raylib.CheckCollisionRecs(shot, borderNorth) || Raylib.CheckCollisionRecs(shot, borderWest) || Raylib.CheckCollisionRecs(shot, borderSouth) || Raylib.CheckCollisionRecs(shot, borderEast) || Raylib.CheckCollisionRecs(shot, enemy1) || Raylib.CheckCollisionRecs(shot, enemy2) || Raylib.CheckCollisionRecs(shot, enemy3) || Raylib.CheckCollisionRecs(shot, enemy4) || Raylib.CheckCollisionRecs(shot, enemy5) || Raylib.CheckCollisionRecs(shot, enemy6) || Raylib.CheckCollisionRecs(shot, enemy7) || Raylib.CheckCollisionRecs(shot, enemyS1) || Raylib.CheckCollisionRecs(shot, enemyS2) || Raylib.CheckCollisionRecs(shot, enemyS3) || Raylib.CheckCollisionRecs(shot, enemyBoss))
                     {
                         shotCount = 0;
                         shotAlive = false;
@@ -572,9 +580,30 @@ namespace Simple_game
                     }
 
 
-                    if (wave > 1 && powerUpAlive == true)
+                    if (wave > 2 && powerUpAlive == true)
                     {
                         Raylib.DrawRectangleRec(powerUp, Color.YELLOW);
+                    }
+
+                    if (Raylib.CheckCollisionRecs(player, powerUp))
+                    {
+                        powerUpAlive = false;
+                        poweredUp = true;
+                    }
+
+                    if (poweredUp)
+                    {
+                        powerTime--;
+                        shotValue = 2;
+
+                        if (powerTime < 0)
+                        {
+                            poweredUp = false;
+                        }
+                    }
+                    else
+                    {
+                        shotValue = 1;
                     }
                 }
                 Raylib.EndDrawing();
