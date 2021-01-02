@@ -18,7 +18,7 @@ namespace Simple_game
             int shotSizeY = 10;
             int shotSizeX = 10;
             int enemyBossHp = 5;
-            int powerTime = 5;
+            int powerTime = 30;
             int shotValue = 1;
             bool enemy1Alive = true;
             bool enemy2Alive = true;
@@ -31,6 +31,7 @@ namespace Simple_game
             bool enemyS2Alive = true;
             bool enemyS3Alive = true;
             bool enemyBossAlive = true;
+            bool playerAlive = true;
             bool shotAlive = false;
             bool powerUpAlive = true;
             bool toggle2 = true;
@@ -56,6 +57,13 @@ namespace Simple_game
             Rectangle enemyS3 = new Rectangle(-100, 585, 15, 15);
             Rectangle enemyBoss = new Rectangle(-150, 0, 40, 40);
             Rectangle powerUp = new Rectangle(140, 450, 15, 15);
+            Rectangle enemyShot1 = new Rectangle(-300, 0, 10, 10);
+            Rectangle enemyShot2 = new Rectangle(-300, 0, 10, 10);
+            Rectangle enemyShot3 = new Rectangle(-300, 0, 10, 10);
+            Rectangle enemyBossShotUp = new Rectangle(-200, 0, 20, 20);
+            Rectangle enemyBossShotRight = new Rectangle(-200, 0, 20, 20);
+            Rectangle enemyBossShotDown = new Rectangle(-200, 0, 20, 20);
+            Rectangle enemyBossShotLeft = new Rectangle(-200, 0, 20, 20);
 
             Raylib.InitWindow(800, 600, "Game");
             Raylib.SetTargetFPS(60);
@@ -171,12 +179,25 @@ namespace Simple_game
                         enemyBossAlive = false;
                     }
 
+                    if (Raylib.CheckCollisionRecs(player, enemy1) || Raylib.CheckCollisionRecs(player, enemy2) || Raylib.CheckCollisionRecs(player, enemy3) || Raylib.CheckCollisionRecs(player, enemy4) || Raylib.CheckCollisionRecs(player, enemy5) || Raylib.CheckCollisionRecs(player, enemy6) || Raylib.CheckCollisionRecs(player, enemy7) || Raylib.CheckCollisionRecs(player, enemyS1) || Raylib.CheckCollisionRecs(player, enemyS2) || Raylib.CheckCollisionRecs(player, enemyS3) || Raylib.CheckCollisionRecs(player, enemyBoss) || Raylib.CheckCollisionRecs(player, enemyShot1) || Raylib.CheckCollisionRecs(player, enemyShot2) || Raylib.CheckCollisionRecs(player, enemyShot3) || Raylib.CheckCollisionRecs(player, enemyBossShotUp) || Raylib.CheckCollisionRecs(player, enemyBossShotRight) || Raylib.CheckCollisionRecs(player, enemyBossShotDown) || Raylib.CheckCollisionRecs(player, enemyBossShotLeft))
+                    {
+                        playerAlive = false;
+                    }
+
+
                     reload--;
                     shot.x += shotX * shotValue;
                     shot.y += shotY * shotValue;
 
                     Raylib.ClearBackground(Color.WHITE);
-                    Raylib.DrawRectangleRec(player, Color.RED);
+                    if (playerAlive)
+                    {
+                        Raylib.DrawRectangleRec(player, Color.RED);
+                    }
+                    else
+                    {
+                        screen = "lose";
+                    }
 
                     if (enemy1Alive == true && wave == 1)
                     {
@@ -465,6 +486,26 @@ namespace Simple_game
                     if (enemyBossAlive == true && wave == 5)
                     {
                         Raylib.DrawRectangleRec(enemyBoss, Color.BLUE);
+                        if (enemyBoss.x < player.x)
+                        {
+                            enemyBoss.x += 1.5f;
+                        }
+
+                        if (enemyBoss.x > player.x)
+                        {
+                            enemyBoss.x -= 1.5f;
+                        }
+
+                        if (enemyBoss.y < player.y)
+                        {
+                            enemyBoss.y += 1.5f;
+                        }
+
+                        if (enemyBoss.y > player.y)
+                        {
+                            enemyBoss.y -= 1.5f;
+                        }
+
                     }
 
                     if (wave == 2 && toggle2)
@@ -574,7 +615,7 @@ namespace Simple_game
                         wave = 5;
                     }
 
-                    if (enemy1Alive == false && enemy2Alive == false && enemy3Alive == false && enemy4Alive == false && enemy5Alive && enemy6Alive == false && enemy7Alive == false && enemyS1Alive == false && enemyS2Alive == false && enemyS3Alive == false && enemyBossAlive == false)
+                    if (enemyBossAlive == false)
                     {
                         screen = "win";
                     }
@@ -606,9 +647,118 @@ namespace Simple_game
                         shotValue = 1;
                     }
                 }
+
+                if (screen == "win")
+                {
+                    Raylib.ClearBackground(Color.GRAY);
+                    Raylib.DrawText("Victory", 300, 200, 40, Color.WHITE);
+                    Raylib.DrawText("Press enter to play again", 250, 250, 20, Color.WHITE);
+
+                    if (Raylib.IsKeyPressed(KeyboardKey.KEY_ENTER))
+                    {
+                        direction = "up";
+                        screen = "game";
+                        shotCount = 0;
+                        reload = 1;
+                        wave = 1;
+                        shotSizeY = 10;
+                        shotSizeX = 10;
+                        enemyBossHp = 5;
+                        powerTime = 30;
+                        shotValue = 1;
+                        enemy1Alive = true;
+                        enemy2Alive = true;
+                        enemy3Alive = true;
+                        enemy4Alive = true;
+                        enemy5Alive = true;
+                        enemy6Alive = true;
+                        enemy7Alive = true;
+                        enemyS1Alive = true;
+                        enemyS2Alive = true;
+                        enemyS3Alive = true;
+                        enemyBossAlive = true;
+                        playerAlive = true;
+                        shotAlive = false;
+                        powerUpAlive = true;
+                        toggle2 = true;
+                        toggle4 = true;
+                        toggle3 = true;
+                        toggle5 = true;
+                        poweredUp = false;
+                        player.x = 400;
+                        player.y = 300;
+                        enemy1.x = 0;
+                        enemy1.y = 0;
+                        enemy2.y = 0;
+                        enemy3.y = 580;
+                        enemy4.y = 0;
+                        enemy5.y = 580;
+                        enemy6.y = 0;
+                        enemy7.y = 580;
+                        enemyS1.y = 0;
+                        enemyS2.y = 0;
+                        enemyS3.y = 585;
+                        enemyBoss.y = 0;
+                    }
+                }
+
+                if (screen == "lose")
+                {
+                    Raylib.ClearBackground(Color.GRAY);
+                    Raylib.DrawText("Game Over", 275, 200, 40, Color.WHITE);
+                    Raylib.DrawText("Press enter to try again", 255, 250, 20, Color.WHITE);
+
+                    if (Raylib.IsKeyPressed(KeyboardKey.KEY_ENTER))
+                    {
+                        direction = "up";
+                        screen = "game";
+                        shotCount = 0;
+                        reload = 1;
+                        wave = 1;
+                        shotSizeY = 10;
+                        shotSizeX = 10;
+                        enemyBossHp = 5;
+                        powerTime = 30;
+                        shotValue = 1;
+                        enemy1Alive = true;
+                        enemy2Alive = true;
+                        enemy3Alive = true;
+                        enemy4Alive = true;
+                        enemy5Alive = true;
+                        enemy6Alive = true;
+                        enemy7Alive = true;
+                        enemyS1Alive = true;
+                        enemyS2Alive = true;
+                        enemyS3Alive = true;
+                        enemyBossAlive = true;
+                        playerAlive = true;
+                        shotAlive = false;
+                        powerUpAlive = true;
+                        toggle2 = true;
+                        toggle4 = true;
+                        toggle3 = true;
+                        toggle5 = true;
+                        poweredUp = false;
+                        player.x = 400;
+                        player.y = 300;
+                        enemy1.x = 0;
+                        enemy1.y = 0;
+                        enemy2.y = 0;
+                        enemy3.y = 580;
+                        enemy4.y = 0;
+                        enemy5.y = 580;
+                        enemy6.y = 0;
+                        enemy7.y = 580;
+                        enemyS1.y = 0;
+                        enemyS2.y = 0;
+                        enemyS3.y = 585;
+                        enemyBoss.y = 0;
+                    }
+                }
                 Raylib.EndDrawing();
 
             }
         }
     }
 }
+
