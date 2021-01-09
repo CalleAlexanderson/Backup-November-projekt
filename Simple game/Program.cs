@@ -18,7 +18,11 @@ namespace Simple_game
             int shotSizeY = 10;
             int shotSizeX = 10;
             int enemyBossHp = 5;
-            int powerTime = 30;
+            int enemyBoss1Hp = 3;
+            int enemyBoss2Hp = 3;
+            int enemyBoss3Hp = 3;
+            int enemyBoss4Hp = 3;
+            int powerTime = 200;
             int shotValue = 1;
             bool enemy1Alive = true;
             bool enemy2Alive = true;
@@ -31,19 +35,26 @@ namespace Simple_game
             bool enemyS2Alive = true;
             bool enemyS3Alive = true;
             bool enemyBossAlive = true;
+            bool enemyBoss1Alive = false;
+            bool enemyBoss2Alive = false;
+            bool enemyBoss3Alive = false;
+            bool enemyBoss4Alive = false;
             bool playerAlive = true;
             bool shotAlive = false;
             bool powerUpAlive = true;
+            bool toggle1 = true;
             bool toggle2 = true;
             bool toggle3 = true;
             bool toggle4 = true;
             bool toggle5 = true;
+            bool toggle6 = false;
             bool poweredUp = false;
+            bool phase2 = false;
             Rectangle player = new Rectangle(400, 300, 20, 20);
-            Rectangle borderNorth = new Rectangle(0, 0, 800, 1);
-            Rectangle borderWest = new Rectangle(0, 0, 1, 600);
-            Rectangle borderSouth = new Rectangle(0, 599, 800, 1);
-            Rectangle borderEast = new Rectangle(799, 0, 1, 600);
+            Rectangle borderNorth = new Rectangle(0, -1, 800, -1);
+            Rectangle borderWest = new Rectangle(-1, 0, -1, 600);
+            Rectangle borderSouth = new Rectangle(0, 600, 800, 0);
+            Rectangle borderEast = new Rectangle(800, 0, 0, 600);
             Rectangle shot = new Rectangle(1000, 1000, shotSizeX, shotSizeY);
             Rectangle enemy1 = new Rectangle(0, 0, 20, 20);
             Rectangle enemy2 = new Rectangle(-100, 0, 20, 20);
@@ -57,13 +68,10 @@ namespace Simple_game
             Rectangle enemyS3 = new Rectangle(-100, 585, 15, 15);
             Rectangle enemyBoss = new Rectangle(-150, 0, 40, 40);
             Rectangle powerUp = new Rectangle(140, 450, 15, 15);
-            Rectangle enemyShot1 = new Rectangle(-300, 0, 10, 10);
-            Rectangle enemyShot2 = new Rectangle(-300, 0, 10, 10);
-            Rectangle enemyShot3 = new Rectangle(-300, 0, 10, 10);
-            Rectangle enemyBossShotUp = new Rectangle(-200, 0, 20, 20);
-            Rectangle enemyBossShotRight = new Rectangle(-200, 0, 20, 20);
-            Rectangle enemyBossShotDown = new Rectangle(-200, 0, 20, 20);
-            Rectangle enemyBossShotLeft = new Rectangle(-200, 0, 20, 20);
+            Rectangle enemyBoss1 = new Rectangle(-200, 0, 20, 20);
+            Rectangle enemyBoss2 = new Rectangle(-200, 0, 20, 20);
+            Rectangle enemyBoss3 = new Rectangle(-200, 0, 20, 20);
+            Rectangle enemyBoss4 = new Rectangle(-200, 0, 20, 20);
 
             Raylib.InitWindow(800, 600, "Game");
             Raylib.SetTargetFPS(60);
@@ -74,12 +82,35 @@ namespace Simple_game
                 {
                     Raylib.ClearBackground(Color.GRAY);
                     Raylib.DrawText("Press enter to start", 165, 200, 40, Color.WHITE);
+                    Raylib.DrawText("Press space for controls", 145, 300, 40, Color.WHITE);
 
                     if (Raylib.IsKeyPressed(KeyboardKey.KEY_ENTER))
                     {
                         screen = "game";
                         wave = 1;
                     }
+
+                    if (Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE))
+                    {
+                        screen = "controls";
+                    }
+                }
+
+                if (screen == "controls")
+                {
+                    if (Raylib.IsKeyPressed(KeyboardKey.KEY_ENTER))
+                    {
+                        screen = "game";
+                        wave = 1;
+                    }
+
+                    Raylib.ClearBackground(Color.GRAY);
+                    Raylib.DrawText("Up = W", 100, 100, 30, Color.WHITE);
+                    Raylib.DrawText("Left = A", 100, 150, 30, Color.WHITE);
+                    Raylib.DrawText("Down = S", 100, 200, 30, Color.WHITE);
+                    Raylib.DrawText("Right = D", 100, 250, 30, Color.WHITE);
+                    Raylib.DrawText("space = Shoot", 100, 300, 30, Color.WHITE);
+                    Raylib.DrawText("Press enter to start", 350, 200, 30, Color.WHITE);
                 }
 
                 if (screen == "game")
@@ -174,12 +205,62 @@ namespace Simple_game
                         shotCount = 0;
                     }
 
-                    if (enemyBossHp == 0)
+                    if (Raylib.CheckCollisionRecs(shot, enemyBoss1))
                     {
-                        enemyBossAlive = false;
+                        enemyBoss1Hp--;
+                        shotCount = 0;
                     }
 
-                    if (Raylib.CheckCollisionRecs(player, enemy1) || Raylib.CheckCollisionRecs(player, enemy2) || Raylib.CheckCollisionRecs(player, enemy3) || Raylib.CheckCollisionRecs(player, enemy4) || Raylib.CheckCollisionRecs(player, enemy5) || Raylib.CheckCollisionRecs(player, enemy6) || Raylib.CheckCollisionRecs(player, enemy7) || Raylib.CheckCollisionRecs(player, enemyS1) || Raylib.CheckCollisionRecs(player, enemyS2) || Raylib.CheckCollisionRecs(player, enemyS3) || Raylib.CheckCollisionRecs(player, enemyBoss) || Raylib.CheckCollisionRecs(player, enemyShot1) || Raylib.CheckCollisionRecs(player, enemyShot2) || Raylib.CheckCollisionRecs(player, enemyShot3) || Raylib.CheckCollisionRecs(player, enemyBossShotUp) || Raylib.CheckCollisionRecs(player, enemyBossShotRight) || Raylib.CheckCollisionRecs(player, enemyBossShotDown) || Raylib.CheckCollisionRecs(player, enemyBossShotLeft))
+                    if (Raylib.CheckCollisionRecs(shot, enemyBoss2))
+                    {
+                        enemyBoss2Hp--;
+                        shotCount = 0;
+                    }
+
+                    if (Raylib.CheckCollisionRecs(shot, enemyBoss3))
+                    {
+                        enemyBoss3Hp--;
+                        shotCount = 0;
+                    }
+
+                    if (Raylib.CheckCollisionRecs(shot, enemyBoss4))
+                    {
+                        enemyBoss4Hp--;
+                        shotCount = 0;
+                    }
+
+                    if (toggle1 && enemyBossHp == 0)
+                    {
+                        toggle1 = false;
+                        phase2 = true;
+                        enemyBossAlive = false;
+                        enemyBoss1Alive = true;
+                        enemyBoss2Alive = true;
+                        enemyBoss3Alive = true;
+                        enemyBoss4Alive = true;
+                    }
+
+                    if (enemyBoss1Hp == 0)
+                    {
+                        enemyBoss1Alive = false;
+                    }
+
+                    if (enemyBoss2Hp == 0)
+                    {
+                        enemyBoss2Alive = false;
+                    }
+
+                    if (enemyBoss3Hp == 0)
+                    {
+                        enemyBoss3Alive = false;
+                    }
+
+                    if (enemyBoss4Hp == 0)
+                    {
+                        enemyBoss4Alive = false;
+                    }
+
+                    if (Raylib.CheckCollisionRecs(player, enemy1) || Raylib.CheckCollisionRecs(player, enemy2) || Raylib.CheckCollisionRecs(player, enemy3) || Raylib.CheckCollisionRecs(player, enemy4) || Raylib.CheckCollisionRecs(player, enemy5) || Raylib.CheckCollisionRecs(player, enemy6) || Raylib.CheckCollisionRecs(player, enemy7) || Raylib.CheckCollisionRecs(player, enemyS1) || Raylib.CheckCollisionRecs(player, enemyS2) || Raylib.CheckCollisionRecs(player, enemyS3) || Raylib.CheckCollisionRecs(player, enemyBoss) || Raylib.CheckCollisionRecs(player, enemyBoss1) || Raylib.CheckCollisionRecs(player, enemyBoss2) || Raylib.CheckCollisionRecs(player, enemyBoss3) || Raylib.CheckCollisionRecs(player, enemyBoss4))
                     {
                         playerAlive = false;
                     }
@@ -403,22 +484,22 @@ namespace Simple_game
 
                         if (enemyS1.x < player.x)
                         {
-                            enemyS1.x += 1.7f;
+                            enemyS1.x += 2.7f;
                         }
 
                         if (enemyS1.x > player.x)
                         {
-                            enemyS1.x -= 1.7f;
+                            enemyS1.x -= 2.7f;
                         }
 
                         if (enemyS1.y < player.y)
                         {
-                            enemyS1.y += 1.7f;
+                            enemyS1.y += 2.7f;
                         }
 
                         if (enemyS1.y > player.y)
                         {
-                            enemyS1.y -= 1.7f;
+                            enemyS1.y -= 2.7f;
                         }
                     }
                     else
@@ -432,22 +513,22 @@ namespace Simple_game
 
                         if (enemyS2.x < player.x)
                         {
-                            enemyS2.x += 1.7f;
+                            enemyS2.x += 2.7f;
                         }
 
                         if (enemyS2.x > player.x)
                         {
-                            enemyS2.x -= 1.7f;
+                            enemyS2.x -= 2.7f;
                         }
 
                         if (enemyS2.y < player.y)
                         {
-                            enemyS2.y += 1.7f;
+                            enemyS2.y += 2.7f;
                         }
 
                         if (enemyS2.y > player.y)
                         {
-                            enemyS2.y -= 1.7f;
+                            enemyS2.y -= 2.7f;
                         }
                     }
                     else
@@ -460,22 +541,22 @@ namespace Simple_game
                         Raylib.DrawRectangleRec(enemyS3, Color.BLUE);
                         if (enemyS3.x < player.x)
                         {
-                            enemyS3.x += 1.7f;
+                            enemyS3.x += 2.7f;
                         }
 
                         if (enemyS3.x > player.x)
                         {
-                            enemyS3.x -= 1.7f;
+                            enemyS3.x -= 2.7f;
                         }
 
                         if (enemyS3.y < player.y)
                         {
-                            enemyS3.y += 1.7f;
+                            enemyS3.y += 2.7f;
                         }
 
                         if (enemyS3.y > player.y)
                         {
-                            enemyS3.y -= 1.7f;
+                            enemyS3.y -= 2.7f;
                         }
                     }
                     else
@@ -488,24 +569,212 @@ namespace Simple_game
                         Raylib.DrawRectangleRec(enemyBoss, Color.BLUE);
                         if (enemyBoss.x < player.x)
                         {
-                            enemyBoss.x += 1.5f;
+                            enemyBoss.x += 1.8f;
                         }
 
                         if (enemyBoss.x > player.x)
                         {
-                            enemyBoss.x -= 1.5f;
+                            enemyBoss.x -= 1.8f;
                         }
 
                         if (enemyBoss.y < player.y)
                         {
-                            enemyBoss.y += 1.5f;
+                            enemyBoss.y += 1.8f;
                         }
 
                         if (enemyBoss.y > player.y)
                         {
-                            enemyBoss.y -= 1.5f;
+                            enemyBoss.y -= 1.8f;
                         }
 
+                        enemyBoss1.x = enemyBoss.x + 10;
+                        enemyBoss1.y = enemyBoss.y + 10;
+                        enemyBoss2.x = enemyBoss.x + 10;
+                        enemyBoss2.y = enemyBoss.y + 10;
+                        enemyBoss3.x = enemyBoss.x + 10;
+                        enemyBoss3.y = enemyBoss.y + 10;
+                        enemyBoss4.x = enemyBoss.x + 10;
+                        enemyBoss4.y = enemyBoss.y + 10;
+                    }
+                    else
+                    {
+                        enemyBoss.x = -10000;
+                    }
+
+                    if (enemyBoss1Alive)
+                    {
+                        Raylib.DrawRectangleRec(enemyBoss1, Color.BLUE);
+                    }
+
+                    if (enemyBoss2Alive)
+                    {
+                        Raylib.DrawRectangleRec(enemyBoss2, Color.BLUE);
+                    }
+
+                    if (enemyBoss3Alive)
+                    {
+                        Raylib.DrawRectangleRec(enemyBoss3, Color.BLUE);
+                    }
+
+                    if (enemyBoss4Alive)
+                    {
+                        Raylib.DrawRectangleRec(enemyBoss4, Color.BLUE);
+                    }
+
+                    if (phase2)
+                    {
+                        if (!Raylib.CheckCollisionRecs(enemyBoss1, borderWest))
+                        {
+                            enemyBoss1.x = enemyBoss1.x - 5;
+                        }
+                        else if (!Raylib.CheckCollisionRecs(enemyBoss1, borderNorth))
+                        {
+                            enemyBoss1.y = enemyBoss1.y - 5;
+                        }
+
+                        if (!Raylib.CheckCollisionRecs(enemyBoss2, borderEast))
+                        {
+                            enemyBoss2.x = enemyBoss2.x + 5;
+                        }
+                        else if (!Raylib.CheckCollisionRecs(enemyBoss2, borderNorth))
+                        {
+                            enemyBoss2.y = enemyBoss2.y - 5;
+                        }
+
+                        if (!Raylib.CheckCollisionRecs(enemyBoss3, borderWest))
+                        {
+                            enemyBoss3.x = enemyBoss3.x - 5;
+                        }
+                        else if (!Raylib.CheckCollisionRecs(enemyBoss3, borderSouth))
+                        {
+                            enemyBoss3.y = enemyBoss3.y + 5;
+                        }
+
+                        if (!Raylib.CheckCollisionRecs(enemyBoss4, borderEast))
+                        {
+                            enemyBoss4.x = enemyBoss4.x + 5;
+                        }
+                        else if (!Raylib.CheckCollisionRecs(enemyBoss4, borderSouth))
+                        {
+                            enemyBoss4.y = enemyBoss4.y + 5;
+                        }
+
+                        if (Raylib.CheckCollisionRecs(enemyBoss1, borderWest) && Raylib.CheckCollisionRecs(enemyBoss1, borderNorth) && Raylib.CheckCollisionRecs(enemyBoss2, borderEast) && Raylib.CheckCollisionRecs(enemyBoss2, borderNorth) && Raylib.CheckCollisionRecs(enemyBoss3, borderWest) && Raylib.CheckCollisionRecs(enemyBoss3, borderSouth) && Raylib.CheckCollisionRecs(enemyBoss4, borderEast) && Raylib.CheckCollisionRecs(enemyBoss4, borderSouth))
+                        {
+                            phase2 = false;
+                            toggle6 = true;
+                        }
+                    }
+
+                    if (toggle6)
+                    {
+                        if (enemyBoss1Alive)
+                        {
+                            if (enemyBoss1.x < player.x)
+                            {
+                                enemyBoss1.x += 2f;
+                            }
+
+                            if (enemyBoss1.x > player.x)
+                            {
+                                enemyBoss1.x -= 2f;
+                            }
+
+                            if (enemyBoss1.y < player.y)
+                            {
+                                enemyBoss1.y += 2f;
+                            }
+
+                            if (enemyBoss1.y > player.y)
+                            {
+                                enemyBoss1.y -= 2f;
+                            }
+                        }
+                        else
+                        {
+                            enemyBoss1.x = -2000;
+                        }
+
+                        if (enemyBoss2Alive)
+                        {
+                            if (enemyBoss2.x < player.x)
+                            {
+                                enemyBoss2.x += 2f;
+                            }
+
+                            if (enemyBoss2.x > player.x)
+                            {
+                                enemyBoss2.x -= 2f;
+                            }
+
+                            if (enemyBoss2.y < player.y)
+                            {
+                                enemyBoss2.y += 2f;
+                            }
+
+                            if (enemyBoss2.y > player.y)
+                            {
+                                enemyBoss2.y -= 2f;
+                            }
+                        }
+                        else
+                        {
+                            enemyBoss2.x = -2000;
+                        }
+
+                        if (enemyBoss3Alive)
+                        {
+                            if (enemyBoss3.x < player.x)
+                            {
+                                enemyBoss3.x += 2f;
+                            }
+
+                            if (enemyBoss3.x > player.x)
+                            {
+                                enemyBoss3.x -= 2f;
+                            }
+
+                            if (enemyBoss3.y < player.y)
+                            {
+                                enemyBoss3.y += 2f;
+                            }
+
+                            if (enemyBoss3.y > player.y)
+                            {
+                                enemyBoss3.y -= 2f;
+                            }
+                        }
+                        else
+                        {
+                            enemyBoss3.x = -2000;
+                        }
+
+                        if (enemyBoss4Alive)
+                        {
+                            if (enemyBoss4.x < player.x)
+                            {
+                                enemyBoss4.x += 2f;
+                            }
+
+                            if (enemyBoss4.x > player.x)
+                            {
+                                enemyBoss4.x -= 2f;
+                            }
+
+                            if (enemyBoss4.y < player.y)
+                            {
+                                enemyBoss4.y += 2f;
+                            }
+
+                            if (enemyBoss4.y > player.y)
+                            {
+                                enemyBoss4.y -= 2f;
+                            }
+                        }
+                        else
+                        {
+                            enemyBoss4.x = -2000;
+                        }
                     }
 
                     if (wave == 2 && toggle2)
@@ -548,7 +817,7 @@ namespace Simple_game
                         Raylib.DrawRectangleRec(shot, Color.GREEN);
                     }
 
-                    if (Raylib.CheckCollisionRecs(shot, borderNorth) || Raylib.CheckCollisionRecs(shot, borderWest) || Raylib.CheckCollisionRecs(shot, borderSouth) || Raylib.CheckCollisionRecs(shot, borderEast) || Raylib.CheckCollisionRecs(shot, enemy1) || Raylib.CheckCollisionRecs(shot, enemy2) || Raylib.CheckCollisionRecs(shot, enemy3) || Raylib.CheckCollisionRecs(shot, enemy4) || Raylib.CheckCollisionRecs(shot, enemy5) || Raylib.CheckCollisionRecs(shot, enemy6) || Raylib.CheckCollisionRecs(shot, enemy7) || Raylib.CheckCollisionRecs(shot, enemyS1) || Raylib.CheckCollisionRecs(shot, enemyS2) || Raylib.CheckCollisionRecs(shot, enemyS3) || Raylib.CheckCollisionRecs(shot, enemyBoss))
+                    if (Raylib.CheckCollisionRecs(shot, borderNorth) || Raylib.CheckCollisionRecs(shot, borderWest) || Raylib.CheckCollisionRecs(shot, borderSouth) || Raylib.CheckCollisionRecs(shot, borderEast) || Raylib.CheckCollisionRecs(shot, enemy1) || Raylib.CheckCollisionRecs(shot, enemy2) || Raylib.CheckCollisionRecs(shot, enemy3) || Raylib.CheckCollisionRecs(shot, enemy4) || Raylib.CheckCollisionRecs(shot, enemy5) || Raylib.CheckCollisionRecs(shot, enemy6) || Raylib.CheckCollisionRecs(shot, enemy7) || Raylib.CheckCollisionRecs(shot, enemyS1) || Raylib.CheckCollisionRecs(shot, enemyS2) || Raylib.CheckCollisionRecs(shot, enemyS3) || Raylib.CheckCollisionRecs(shot, enemyBoss) || Raylib.CheckCollisionRecs(shot, enemyBoss1) || Raylib.CheckCollisionRecs(shot, enemyBoss2) || Raylib.CheckCollisionRecs(shot, enemyBoss3) || Raylib.CheckCollisionRecs(shot, enemyBoss4))
                     {
                         shotCount = 0;
                         shotAlive = false;
@@ -615,10 +884,11 @@ namespace Simple_game
                         wave = 5;
                     }
 
-                    if (enemyBossAlive == false)
+                    if (enemyBossAlive == false && enemyBoss1Alive == false && enemyBoss2Alive == false && enemyBoss3Alive == false && enemyBoss4Alive == false)
                     {
                         screen = "win";
                     }
+
 
 
                     if (wave > 2 && powerUpAlive == true)
@@ -664,7 +934,7 @@ namespace Simple_game
                         shotSizeY = 10;
                         shotSizeX = 10;
                         enemyBossHp = 5;
-                        powerTime = 30;
+                        powerTime = 200;
                         shotValue = 1;
                         enemy1Alive = true;
                         enemy2Alive = true;
@@ -680,11 +950,14 @@ namespace Simple_game
                         playerAlive = true;
                         shotAlive = false;
                         powerUpAlive = true;
+                        toggle1 = true;
                         toggle2 = true;
                         toggle4 = true;
                         toggle3 = true;
                         toggle5 = true;
+                        toggle6 = false;
                         poweredUp = false;
+                        phase2 = false;
                         player.x = 400;
                         player.y = 300;
                         enemy1.x = 0;
@@ -699,6 +972,10 @@ namespace Simple_game
                         enemyS2.y = 0;
                         enemyS3.y = 585;
                         enemyBoss.y = 0;
+                        enemyBoss1.y = 0;
+                        enemyBoss2.y = 0;
+                        enemyBoss3.y = 0;
+                        enemyBoss4.y = 0;
                     }
                 }
 
@@ -718,7 +995,11 @@ namespace Simple_game
                         shotSizeY = 10;
                         shotSizeX = 10;
                         enemyBossHp = 5;
-                        powerTime = 30;
+                        enemyBoss1Hp = 3;
+                        enemyBoss2Hp = 3;
+                        enemyBoss3Hp = 3;
+                        enemyBoss4Hp = 3;
+                        powerTime = 200;
                         shotValue = 1;
                         enemy1Alive = true;
                         enemy2Alive = true;
@@ -731,14 +1012,21 @@ namespace Simple_game
                         enemyS2Alive = true;
                         enemyS3Alive = true;
                         enemyBossAlive = true;
+                        enemyBoss1Alive = false;
+                        enemyBoss2Alive = false;
+                        enemyBoss3Alive = false;
+                        enemyBoss4Alive = false;
                         playerAlive = true;
                         shotAlive = false;
                         powerUpAlive = true;
+                        toggle1 = true;
                         toggle2 = true;
                         toggle4 = true;
                         toggle3 = true;
                         toggle5 = true;
+                        toggle6 = false;
                         poweredUp = false;
+                        phase2 = false;
                         player.x = 400;
                         player.y = 300;
                         enemy1.x = 0;
@@ -753,6 +1041,10 @@ namespace Simple_game
                         enemyS2.y = 0;
                         enemyS3.y = 585;
                         enemyBoss.y = 0;
+                        enemyBoss1.y = 0;
+                        enemyBoss2.y = 0;
+                        enemyBoss3.y = 0;
+                        enemyBoss4.y = 0;
                     }
                 }
                 Raylib.EndDrawing();
