@@ -115,6 +115,7 @@ namespace Simple_game
 
                 if (screen == "game")
                 {
+                    //hur man rör på sig
                     if (Raylib.IsKeyDown(KeyboardKey.KEY_W) && !Raylib.CheckCollisionRecs(player, borderNorth))
                     {
                         player.y -= 2.5f;
@@ -229,7 +230,7 @@ namespace Simple_game
                         shotCount = 0;
                     }
 
-                    if (toggle1 && enemyBossHp == 0)
+                    if (toggle1 && enemyBossHp == 0) //togglar på bossens andra form
                     {
                         toggle1 = false;
                         phase2 = true;
@@ -280,7 +281,7 @@ namespace Simple_game
                         screen = "lose";
                     }
 
-                    if (enemy1Alive == true && wave == 1)
+                    if (enemy1Alive == true && wave == 1) //en lång rad av hur fiendena följer efter dig
                     {
                         Raylib.DrawRectangleRec(enemy1, Color.BLUE);
 
@@ -621,7 +622,7 @@ namespace Simple_game
                         Raylib.DrawRectangleRec(enemyBoss4, Color.BLUE);
                     }
 
-                    if (phase2)
+                    if (phase2) //bossens andra form
                     {
                         if (!Raylib.CheckCollisionRecs(enemyBoss1, borderWest))
                         {
@@ -666,7 +667,7 @@ namespace Simple_game
                         }
                     }
 
-                    if (toggle6)
+                    if (toggle6) //bossarna i form 2 börjar röra på sig
                     {
                         if (enemyBoss1Alive)
                         {
@@ -777,7 +778,7 @@ namespace Simple_game
                         }
                     }
 
-                    if (wave == 2 && toggle2)
+                    if (wave == 2 && toggle2) //systemet för att spawna nya fiender
                     {
                         enemy2.x = 0;
                         enemy3.x = 780;
@@ -807,22 +808,22 @@ namespace Simple_game
                         toggle5 = false;
                     }
 
-                    if (shotAlive == false)
-                    {
-                        shot.x = -1000;
-                        shot.y = -1000;
-                    }
                     if (shotAlive == true)
                     {
                         Raylib.DrawRectangleRec(shot, Color.GREEN);
                     }
+                    else
+                    {
+                        shot.x = -1000;
+                        shot.y = -1000;
+                    }
 
                     if (Raylib.CheckCollisionRecs(shot, borderNorth) || Raylib.CheckCollisionRecs(shot, borderWest) || Raylib.CheckCollisionRecs(shot, borderSouth) || Raylib.CheckCollisionRecs(shot, borderEast) || Raylib.CheckCollisionRecs(shot, enemy1) || Raylib.CheckCollisionRecs(shot, enemy2) || Raylib.CheckCollisionRecs(shot, enemy3) || Raylib.CheckCollisionRecs(shot, enemy4) || Raylib.CheckCollisionRecs(shot, enemy5) || Raylib.CheckCollisionRecs(shot, enemy6) || Raylib.CheckCollisionRecs(shot, enemy7) || Raylib.CheckCollisionRecs(shot, enemyS1) || Raylib.CheckCollisionRecs(shot, enemyS2) || Raylib.CheckCollisionRecs(shot, enemyS3) || Raylib.CheckCollisionRecs(shot, enemyBoss) || Raylib.CheckCollisionRecs(shot, enemyBoss1) || Raylib.CheckCollisionRecs(shot, enemyBoss2) || Raylib.CheckCollisionRecs(shot, enemyBoss3) || Raylib.CheckCollisionRecs(shot, enemyBoss4))
                     {
-                        shotCount = 0;
+                        shotCount = 0; //ta bort skott om nuddar kanten
                         shotAlive = false;
                     }
-
+                    //Skott beroende på vart man siktar
                     if (Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE) && shotCount == 0 && reload < 0 && direction == "up")
                     {
                         shot.x = player.x + 5;
@@ -864,7 +865,7 @@ namespace Simple_game
                         shotAlive = true;
                     }
 
-                    if (enemy1Alive == false)
+                    if (enemy1Alive == false) //wave byte
                     {
                         wave = 2;
                     }
@@ -891,7 +892,7 @@ namespace Simple_game
 
 
 
-                    if (wave > 2 && powerUpAlive == true)
+                    if (wave > 2 && powerUpAlive == true) //spawna power up
                     {
                         Raylib.DrawRectangleRec(powerUp, Color.YELLOW);
                     }
@@ -902,7 +903,7 @@ namespace Simple_game
                         poweredUp = true;
                     }
 
-                    if (poweredUp)
+                    if (poweredUp) //effekt av powerup
                     {
                         powerTime--;
                         shotValue = 2;
@@ -918,13 +919,13 @@ namespace Simple_game
                     }
                 }
 
-                if (screen == "win")
+                if (screen == "win") //Byte skärm när man vunnit
                 {
                     Raylib.ClearBackground(Color.GRAY);
                     Raylib.DrawText("Victory", 300, 200, 40, Color.WHITE);
                     Raylib.DrawText("Press enter to play again", 250, 250, 20, Color.WHITE);
 
-                    if (Raylib.IsKeyPressed(KeyboardKey.KEY_ENTER))
+                    if (Raylib.IsKeyPressed(KeyboardKey.KEY_ENTER)) //kör igen
                     {
                         direction = "up";
                         screen = "game";
@@ -979,13 +980,13 @@ namespace Simple_game
                     }
                 }
 
-                if (screen == "lose")
+                if (screen == "lose") //VIsas om man dör
                 {
                     Raylib.ClearBackground(Color.GRAY);
                     Raylib.DrawText("Game Over", 275, 200, 40, Color.WHITE);
                     Raylib.DrawText("Press enter to try again", 255, 250, 20, Color.WHITE);
 
-                    if (Raylib.IsKeyPressed(KeyboardKey.KEY_ENTER))
+                    if (Raylib.IsKeyPressed(KeyboardKey.KEY_ENTER)) //kör igen
                     {
                         direction = "up";
                         screen = "game";
