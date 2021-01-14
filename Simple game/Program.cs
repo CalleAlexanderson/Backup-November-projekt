@@ -51,10 +51,10 @@ namespace Simple_game
             bool poweredUp = false;
             bool phase2 = false;
             Rectangle player = new Rectangle(400, 300, 20, 20);
-            Rectangle borderNorth = new Rectangle(0, -1, 800, -1);
-            Rectangle borderWest = new Rectangle(-1, 0, -1, 600);
-            Rectangle borderSouth = new Rectangle(0, 600, 800, 0);
-            Rectangle borderEast = new Rectangle(800, 0, 0, 600);
+            Rectangle borderNorth = new Rectangle(1, 1, 800, 0);
+            Rectangle borderWest = new Rectangle(1, 1, 1, 600);
+            Rectangle borderSouth = new Rectangle(1, 600, 800, 0);
+            Rectangle borderEast = new Rectangle(800, 1, 1, 600);
             Rectangle shot = new Rectangle(1000, 1000, shotSizeX, shotSizeY);
             Rectangle enemy1 = new Rectangle(0, 0, 20, 20);
             Rectangle enemy2 = new Rectangle(-100, 0, 20, 20);
